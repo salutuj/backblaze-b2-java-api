@@ -1,7 +1,7 @@
 package synapticloop.b2.response;
 
 /*
- * Copyright (c) 2016 Synapticloop.
+ * Copyright (c) 2016 - 2017 Synapticloop.
  * 
  * All rights reserved.
  * 
@@ -17,6 +17,7 @@ package synapticloop.b2.response;
  */
 
 public final class B2ResponseProperties {
+	public static final String KEY_ABSOLUTE_MINIMUM_PART_SIZE = "absoluteMinimumPartSize";
 	public static final String KEY_ACCOUNT_ID = "accountId";
 	public static final String KEY_ACTION = "action";
 	public static final String KEY_API_URL = "apiUrl";
@@ -33,6 +34,7 @@ public final class B2ResponseProperties {
 	public static final String KEY_FILE_ID = "fileId";
 	public static final String KEY_FILE_INFO = "fileInfo";
 	public static final String KEY_FILE_NAME = "fileName";
+	public static final String KEY_FILE_NAME_PREFIX = "fileNamePrefix";
 	public static final String KEY_FILES = "files";
 	public static final String KEY_LIFECYCLE_RULES = "lifecycleRules";
 	public static final String KEY_MINIMUM_PART_SIZE = "minimumPartSize";
@@ -41,6 +43,7 @@ public final class B2ResponseProperties {
 	public static final String KEY_NEXT_PART_NUMBER = "nextPartNumber";
 	public static final String KEY_PART_NUMBER = "partNumber";
 	public static final String KEY_PARTS = "parts";
+	public static final String KEY_RECOMMENDED_PART_SIZE = "recommendedPartSize";
 	public static final String KEY_REVISION = "revision";
 	public static final String KEY_SIZE = "size";
 	public static final String KEY_UPLOAD_TIMESTAMP = "uploadTimestamp";

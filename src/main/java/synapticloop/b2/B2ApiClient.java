@@ -1,13 +1,7 @@
 package synapticloop.b2;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
 /*
- * Copyright (c) 2016 Synapticloop.
+ * Copyright (c) 2016 - 2017 Synapticloop.
  * 
  * All rights reserved.
  * 
@@ -21,6 +15,12 @@ import java.util.Map;
  * A copy of the Licence is available in the file named LICENSE.txt shipped with 
  * this source code or binaries.
  */
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
@@ -36,6 +36,7 @@ import synapticloop.b2.request.B2DeleteFileVersionRequest;
 import synapticloop.b2.request.B2DownloadFileByIdRequest;
 import synapticloop.b2.request.B2DownloadFileByNameRequest;
 import synapticloop.b2.request.B2FinishLargeFileRequest;
+import synapticloop.b2.request.B2GetDownloadAuthorizationRequest;
 import synapticloop.b2.request.B2GetFileInfoRequest;
 import synapticloop.b2.request.B2GetUploadPartUrlRequest;
 import synapticloop.b2.request.B2GetUploadUrlRequest;
@@ -202,8 +203,8 @@ public class B2ApiClient {
 	 * @throws B2ApiException if there was an error updating the bucket
 	 * @throws IOException if there was an error communicating with the API service
 	 */
-	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType) throws B2ApiException, IOException {
-		return new B2UpdateBucketRequest(client, b2AuthorizeAccountResponse, bucketId, bucketType).getResponse();
+	public B2BucketResponse updateBucket(String bucketId, BucketType bucketType, LifecycleRule... lifecycleRules) throws B2ApiException, IOException {
+		return new B2UpdateBucketRequest(client, b2AuthorizeAccountResponse, bucketId, bucketType, lifecycleRules).getResponse();
 	}
 
 	/**
@@ -768,6 +769,25 @@ public class B2ApiClient {
 	 *   DOWNLOAD FILE API ACTIONS
 	 *
 	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	/**
+	 * Used to generate an authorization token that can be used to download files with the specified prefix
+	 * from a private B2 bucket. Returns an authorization token that can be passed to b2_download_file_by_name
+	 * in the Authorization header or as an Authorization parameter.
+	 *
+	 * @param bucketId the id of the bucket
+	 * @param fileNamePrefix The file name prefix of files the download authorization token will allow b2_download_file_by_name to access.
+	 * @param validDurationInSeconds The number of seconds before the authorization token will expire.
+	 *                                  The maximum value is 604800 which is one week in seconds
+	 * @return The authorization token that can be passed in the Authorization header or as an Authorization
+	 * parameter to b2_download_file_by_name to access files beginning with the file name prefix.
+	 *
+	 * @throws B2ApiException if there was an error with the call
+	 * @throws IOException if there was an error communicating with the API service
+	 */
+	public String getDownloadAuthorization(String bucketId, String fileNamePrefix, Integer validDurationInSeconds) throws B2ApiException, IOException {
+		return new B2GetDownloadAuthorizationRequest(client, b2AuthorizeAccountResponse, bucketId, fileNamePrefix, validDurationInSeconds).getResponse().getAuthorizationToken();
+	}
 
 	/**
 	 * Download a named file from a named bucket to an output file.  This is a
